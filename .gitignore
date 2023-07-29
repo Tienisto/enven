@@ -4,7 +4,7 @@
 
 .idea/
 pubspec.lock
-.env
-.env.prod
+/.env
+/.env.prod
 
 *.g.dart

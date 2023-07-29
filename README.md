@@ -36,7 +36,9 @@ API_ENDPOINT=https://example.com
 dart run enven
 ```
 
-Alternatively (but slower):
+If you just check out the project, you can also run `build_runner`.
+
+Be careful because it only works once. (Subsequent runs won't notice changes.)
 
 ```bash
 dart run build_runner build -d
