@@ -31,6 +31,6 @@ class EnvBuilder implements Builder {
 
   @override
   get buildExtensions => {
-        '.env': ['.g.dart'],
+        r'$lib$': ['.g.dart'],
       };
 }
