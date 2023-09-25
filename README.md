@@ -1,5 +1,9 @@
 # enven
 
+[![pub package](https://img.shields.io/pub/v/enven.svg)](https://pub.dev/packages/enven)
+![ci](https://github.com/Tienisto/enven/actions/workflows/ci.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Generate environment variables from a .env file at compile time with optional obfuscation.
 
 ## Motivation
