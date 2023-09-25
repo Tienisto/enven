@@ -43,40 +43,40 @@ void main() {
 
   group('parseValue', () {
     test('Should parse a boolean', () {
-      expect(parser.parseValue('true', null), true);
-      expect(parser.parseValue('false', null), false);
+      expect(parser.parseValue(value: 'true'), true);
+      expect(parser.parseValue(value: 'false'), false);
     });
 
     test('Should parse a string', () {
-      expect(parser.parseValue('hello', null), 'hello');
+      expect(parser.parseValue(value: 'hello'), 'hello');
     });
 
     test('Should parse an int', () {
-      expect(parser.parseValue('123', null), 123);
+      expect(parser.parseValue(value: '123'), 123);
     });
 
     test('Should parse a double', () {
-      expect(parser.parseValue('123.456', null), 123.456);
+      expect(parser.parseValue(value: '123.456'), 123.456);
     });
 
     test('Should parse a string with double quotes', () {
-      expect(parser.parseValue('"hello"', null), 'hello');
+      expect(parser.parseValue(value: '"hello"'), 'hello');
     });
 
     test('Should parse a string with single quotes', () {
-      expect(parser.parseValue("'hello'", null), 'hello');
+      expect(parser.parseValue(value: "'hello'"), 'hello');
     });
 
     test('Should parse a string with double quotes and spaces', () {
-      expect(parser.parseValue('"hello world"', null), 'hello world');
+      expect(parser.parseValue(value: '"hello world"'), 'hello world');
     });
 
     test('Should parse a string ignoring comments', () {
-      expect(parser.parseValue('hello #world', null), 'hello');
+      expect(parser.parseValue(value: 'hello #world'), 'hello');
     });
 
     test('Should parse an string with type hint', () {
-      expect(parser.parseValue('123', 'String'), '123');
+      expect(parser.parseValue(value: '123', type: 'String'), '123');
     });
   });
 }

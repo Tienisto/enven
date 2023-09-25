@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:enven/model/enven_file.dart';
 import 'package:enven/util/recase.dart';
 
-final _random = Random.secure();
-
 class EnvenGenerator {
   const EnvenGenerator();
 
@@ -16,6 +14,10 @@ class EnvenGenerator {
     buffer.writeln('/// To regenerate, run: `dart run enven`');
     buffer.writeln();
     buffer.writeln('class Env {');
+
+    final random = env.config.seed == null
+        ? Random.secure()
+        : Random(env.config.seed!.hashCode);
 
     final entries = env.entries.entries.toList();
     for (int i = 0; i < entries.length; i++) {
@@ -30,7 +32,7 @@ class EnvenGenerator {
               .toCamelCase();
 
       if (entry.annotations[EnvEntryAnnotation.obfuscate]?.value == true) {
-        _generateObfuscatedEntry(buffer, key, entry.value);
+        _generateObfuscatedEntry(buffer, random, key, entry.value);
       } else {
         buffer.writeln('  static const $key = ${_generateValue(entry.value)};');
       }
@@ -55,13 +57,17 @@ class EnvenGenerator {
   }
 
   void _generateObfuscatedEntry(
-      StringBuffer buffer, String key, Object rawValue) {
+    StringBuffer buffer,
+    Random random,
+    String key,
+    Object rawValue,
+  ) {
     if (rawValue is String) {
       final value = rawValue.toString();
       final valueCodes = value.codeUnits;
       final randomCodes = List.generate(
         valueCodes.length,
-        (index) => _random.nextInt(1 << 16),
+        (index) => random.nextInt(1 << 16),
       );
       final obfuscatedValue = List.generate(
         valueCodes.length,

@@ -76,6 +76,7 @@ API_ENDPOINT=https://example.com
 | Key         | Applies to | Type                              | Usage                               | Default              |
 |-------------|------------|-----------------------------------|-------------------------------------|----------------------|
 | `output`    | file       | `String`                          | Specify output file path            | `lib/gen/env.g.dart` |
+| `seed`      | file       | `String`                          | Specify seed for obfuscation        | `null`               |
 | `obfuscate` | variable   | `boolean`                         | Obfuscate the environment variable. | `false`              |
 | `type`      | variable   | `String`, `int`, `double`, `bool` | Specify exact type                  | (inferred)           |
 | `name`      | variable   | `String`                          | Specify variable name               | (inferred)           |

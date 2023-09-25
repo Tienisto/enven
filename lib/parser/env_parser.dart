@@ -42,8 +42,9 @@ class EnvParser {
   EnvFile parse(String content) {
     final lines = content.split('\n');
 
-    // config
+    // file config
     String? output;
+    String? seed;
 
     final entries = <String, EnvEntry>{};
     Map<String, EnvEntryAnnotation> annotationCache = {};
@@ -52,11 +53,15 @@ class EnvParser {
         final annotation = parseAnnotation(line);
         if (annotation != null) {
           switch (annotation.key) {
-            case 'output':
+            case EnvEntryAnnotation.output:
               output = annotation.value.toString();
               break;
+            case EnvEntryAnnotation.seed:
+              seed = annotation.value.toString();
+              break;
+            default:
+              annotationCache[annotation.key] = annotation;
           }
-          annotationCache[annotation.key] = annotation;
         }
       } else {
         final entry = parseEntry(line, annotationCache);
@@ -70,6 +75,7 @@ class EnvParser {
     return EnvFile(
       config: EnvenConfig(
         output: output,
+        seed: seed,
       ),
       entries: entries,
     );
@@ -98,7 +104,7 @@ class EnvParser {
     } else {
       return EnvEntryAnnotation(
         key: annotationParts[0].trim(),
-        value: parseValue(annotationParts[1].trim(), null),
+        value: parseValue(value: annotationParts[1].trim()),
       );
     }
   }
@@ -114,13 +120,15 @@ class EnvParser {
     return EnvEntry(
       annotations: annotations,
       key: parts[0].trim(),
-      value: parseValue(parts[1].trim(),
-          annotations[EnvEntryAnnotation.type]?.value as String?),
+      value: parseValue(
+        value: parts[1].trim(),
+        type: annotations[EnvEntryAnnotation.type]?.value as String?,
+      ),
     );
   }
 
   /// Parses the value from the given [value] and [type].
-  Object parseValue(String value, String? type) {
+  Object parseValue({required String value, String? type}) {
     if (type != null) {
       switch (type) {
         case 'bool':

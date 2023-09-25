@@ -4,6 +4,7 @@ class EnvFile {
   final EnvenConfig config;
 
   /// All entries in the .env file.
+  /// The key is the entry key which is the same as [EnvEntry.key].
   final Map<String, EnvEntry> entries;
 
   EnvFile({
@@ -27,6 +28,7 @@ class EnvFile {
     return EnvFile(
       config: EnvenConfig(
         output: config.output ?? fallback.config.output,
+        seed: config.seed ?? fallback.config.seed,
       ),
       entries: mergedEntries,
     );
@@ -40,17 +42,27 @@ class EnvenConfig {
   /// The output file path.
   final String? output;
 
+  /// The seed used for obfuscation.
+  /// If null, a random seed will be used.
+  final String? seed;
+
   EnvenConfig({
     required this.output,
+    required this.seed,
   });
 }
 
 /// Represents a single entry in a .env file.
 class EnvEntry {
-  /// Annotations for this entry.
+  /// Annotations above this entry.
+  /// Format: #enven:<key>=<value>
+  /// If no value is specified, the value is assumed to be `true`.
   final Map<String, EnvEntryAnnotation> annotations;
 
+  /// The key of this entry. ("key" in "key=value")
   final String key;
+
+  /// The value of this entry. ("value" in "key=value")
   final Object value;
 
   EnvEntry({
@@ -75,6 +87,11 @@ class EnvEntry {
 
 /// Represents a single annotation for a .env entry.
 class EnvEntryAnnotation {
+  // File annotations
+  static const output = 'output';
+  static const seed = 'seed';
+
+  // Entry annotations
   static const obfuscate = 'obfuscate';
   static const type = 'type';
   static const name = 'name';
