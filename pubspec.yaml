@@ -1,6 +1,6 @@
 name: enven
 description: Generate environment variables from a .env file at compile time with optional obfuscation.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/Tienisto/enven
 topics:
   - env
