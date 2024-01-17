@@ -12,7 +12,6 @@ class EnvenGenerator {
     buffer.writeln('/// Generated file. Do not edit.');
     buffer.writeln('///');
     buffer.writeln('/// To regenerate, run: `dart run enven`');
-    buffer.writeln();
     buffer.writeln('class Env {');
 
     final random = env.config.seed == null
