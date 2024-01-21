@@ -106,6 +106,7 @@ class EnvEntryAnnotation {
 
   // Entry annotations
   static const obfuscate = 'obfuscate';
+  static const isConst = 'const';
   static const type = 'type';
   static const name = 'name';
 
@@ -121,5 +122,13 @@ class EnvEntryAnnotation {
 extension AnnotationsExt on Map<String, EnvEntryAnnotation> {
   String? getTypeAnnotation() {
     return this[EnvEntryAnnotation.type]?.value as String?;
+  }
+
+  bool hasObfuscateAnnotation() {
+    return this[EnvEntryAnnotation.obfuscate]?.value == true;
+  }
+
+  bool hasConstAnnotation() {
+    return this[EnvEntryAnnotation.isConst]?.value == true;
   }
 }

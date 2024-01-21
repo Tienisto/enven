@@ -26,9 +26,20 @@ class EnvenGenerator {
                   entry.key)
               .toCamelCase();
 
-      buffer.writeln(
-        '  static ${entry.annotations.getTypeAnnotation() ?? entry.value.runtimeType} get $key => instance.$key;',
-      );
+      if (entry.annotations.hasConstAnnotation()) {
+        if (entry.annotations.hasObfuscateAnnotation()) {
+          throw Exception(
+            'Cannot obfuscate a constant value. Key: ${entry.key}',
+          );
+        }
+        buffer.writeln(
+          '  static const ${entry.annotations.getTypeAnnotation() ?? entry.value.runtimeType} $key = ${_generateValue(entry.value)};',
+        );
+      } else {
+        buffer.writeln(
+          '  static ${entry.annotations.getTypeAnnotation() ?? entry.value.runtimeType} get $key => instance.$key;',
+        );
+      }
     }
 
     buffer.writeln('}');
@@ -38,9 +49,15 @@ class EnvenGenerator {
     final random = env.config.seed == null
         ? Random.secure()
         : Random(env.config.seed!.hashCode);
+    bool first = true;
     for (int i = 0; i < entries.length; i++) {
       final entry = entries[i].value;
-      if (i != 0) {
+
+      if (entry.annotations.hasConstAnnotation()) {
+        continue;
+      }
+
+      if (!first) {
         buffer.writeln();
       }
 
@@ -50,14 +67,14 @@ class EnvenGenerator {
               .toCamelCase();
       final valueType = entry.annotations.getTypeAnnotation();
 
-      if (entry.value != null &&
-          entry.annotations[EnvEntryAnnotation.obfuscate]?.value == true) {
+      if (entry.value != null && entry.annotations.hasObfuscateAnnotation()) {
         _generateObfuscatedEntry(buffer, random, key, valueType, entry.value);
       } else {
         buffer.writeln(
           '  final ${valueType ?? entry.value.runtimeType} $key = ${_generateValue(entry.value)};',
         );
       }
+      first = false;
     }
     buffer.writeln('}');
     return buffer.toString();

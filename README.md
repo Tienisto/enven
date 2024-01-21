@@ -84,7 +84,8 @@ API_ENDPOINT=https://example.com
 |-------------|------------|-----------------------------------|-------------------------------------|----------------------|
 | `output`    | file       | `String`                          | Specify output file path            | `lib/gen/env.g.dart` |
 | `seed`      | file       | `String`                          | Specify seed for obfuscation        | (random)             |
-| `obfuscate` | variable   | `boolean`                         | Obfuscate the environment variable. | `false`              |
+| `obfuscate` | variable   | `bool`                            | Obfuscate the environment variable. | `false`              |
+| `const`     | variable   | `bool`                            | Generate as const                   | `false`              |
 | `type`      | variable   | `String`, `int`, `double`, `bool` | Specify exact type                  | (inferred)           |
 | `name`      | variable   | `String`                          | Specify variable name               | (inferred)           |
 
@@ -141,6 +142,7 @@ void main() {
 ```
 
 You can also use `with EnvData` instead of `implements EnvData` to only override some variables.
+Be aware that variables annotated with `#enven:const` cannot be overridden.
 
 ## License
 
