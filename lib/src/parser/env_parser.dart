@@ -17,29 +17,41 @@ class EnvParser {
 
   /// Parses the .env file from the file system.
   EnvFile readFileSystem() {
-    EnvFile? curr;
-    for (final envFile in _envFiles) {
-      final file = File(envFile);
-      if (file.existsSync()) {
-        final content = file.readAsStringSync();
-        final parsed = parseFileContents(content);
-        if (curr != null) {
-          curr = parsed.withFallback(curr);
-        } else {
-          curr = parsed;
-        }
-      }
-    }
+    return parseContentList(
+      _envFiles
+          .map((e) {
+            final file = File(e);
+            if (!file.existsSync()) {
+              return null;
+            }
+            return file.readAsStringSync();
+          })
+          .where((element) => element != null)
+          .cast<String>()
+          .toList(),
+    );
+  }
 
-    if (curr == null) {
+  EnvFile parseContentList(List<String> files) {
+    if (files.isEmpty) {
       throw Exception('No .env file found');
     }
 
-    return curr;
+    EnvFile? curr;
+    for (final content in files) {
+      final parsed = parseContent(content);
+      if (curr != null) {
+        curr = parsed.withFallback(curr, this);
+      } else {
+        curr = parsed;
+      }
+    }
+
+    return curr!;
   }
 
   /// Parses the .env file from the given [content].
-  EnvFile parseFileContents(String content) {
+  EnvFile parseContent(String content) {
     final lines = content.split('\n');
 
     // file config

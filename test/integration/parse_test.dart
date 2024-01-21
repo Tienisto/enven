@@ -6,28 +6,28 @@ void main() {
   const parser = EnvParser();
 
   test('Should parse empty string', () {
-    final env = parser.parseFileContents('');
+    final env = parser.parseContent('');
     expect(env.config.output, isNull);
     expect(env.config.seed, isNull);
     expect(env.entries, isEmpty);
   });
 
   test('Should parse only output', () {
-    final env = parser.parseFileContents('#enven:output=hi.dart');
+    final env = parser.parseContent('#enven:output=hi.dart');
     expect(env.config.output, 'hi.dart');
     expect(env.config.seed, isNull);
     expect(env.entries, isEmpty);
   });
 
   test('Should parse only seed', () {
-    final env = parser.parseFileContents('#enven:seed=123');
+    final env = parser.parseContent('#enven:seed=123');
     expect(env.config.output, isNull);
     expect(env.config.seed, '123');
     expect(env.entries, isEmpty);
   });
 
   test('Should parse single key-value', () {
-    final env = parser.parseFileContents('aa=bb');
+    final env = parser.parseContent('aa=bb');
     expect(env.config.output, isNull);
     expect(env.config.seed, isNull);
     expect(env.entries, hasLength(1));
@@ -39,7 +39,7 @@ void main() {
   });
 
   test('Should parse single key-value with annotation', () {
-    final env = parser.parseFileContents('''
+    final env = parser.parseContent('''
 #enven:obfuscate
 aa=bb
 ''');
@@ -55,7 +55,7 @@ aa=bb
   });
 
   test('Should ignore ordinary comments', () {
-    final env = parser.parseFileContents('''
+    final env = parser.parseContent('''
 #enven:obfuscate
 # this is a comment
 aa=bb
@@ -73,7 +73,7 @@ aa=bb
   });
 
   test('Should skip empty line during parsing', () {
-    final env = parser.parseFileContents('''
+    final env = parser.parseContent('''
 #enven:obfuscate
 
 aa=bb
@@ -90,7 +90,7 @@ aa=bb
   });
 
   test('Should parse multiple key-value', () {
-    final env = parser.parseFileContents('''
+    final env = parser.parseContent('''
 aa=bb
 cc=dd
 ''');
@@ -111,7 +111,7 @@ cc=dd
   });
 
   test('Should parse multiple key-value with annotation', () {
-    final env = parser.parseFileContents('''
+    final env = parser.parseContent('''
 #enven:obfuscate
 aa=bb
 
@@ -134,5 +134,27 @@ cc=123
     expect(cc.value, '123');
     expect(cc.annotations, hasLength(1));
     expect(cc.annotations[EnvEntryAnnotation.type]!.value, 'String');
+  });
+
+  test('Should respect base type hint', () {
+    final env = parser.parseContentList([
+      '''
+#enven:type=String?
+aa=hello  
+''',
+      '''
+aa=123
+''',
+    ]);
+
+    expect(env.config.output, isNull);
+    expect(env.config.seed, isNull);
+    expect(env.entries, hasLength(1));
+
+    final aa = env.entries['aa']!;
+    expect(aa.key, 'aa');
+    expect(aa.value, '123');
+    expect(aa.annotations, hasLength(1));
+    expect(aa.annotations[EnvEntryAnnotation.type]!.value, 'String?');
   });
 }

@@ -75,8 +75,12 @@ void main() {
       expect(parser.parseValue(value: 'hello #world'), 'hello');
     });
 
-    test('Should parse an string with type hint', () {
+    test('Should parse a string with type hint', () {
       expect(parser.parseValue(value: '123', type: 'String'), '123');
+    });
+
+    test('Should parse a string with a nullable hint', () {
+      expect(parser.parseValue(value: 'null', type: 'String?'), null);
     });
   });
 }

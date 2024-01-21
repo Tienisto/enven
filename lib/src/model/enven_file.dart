@@ -1,3 +1,5 @@
+import 'package:enven/src/parser/env_parser.dart';
+
 /// Represents a .env file.
 class EnvFile {
   /// Global configuration specified in the .env file.
@@ -13,13 +15,13 @@ class EnvFile {
   });
 
   /// Merges this [EnvFile] with the given [fallback].
-  EnvFile withFallback(EnvFile fallback) {
+  EnvFile withFallback(EnvFile fallback, EnvParser parser) {
     final mergedEntries = <String, EnvEntry>{...fallback.entries};
     for (final entry in entries.entries) {
       if (mergedEntries.containsKey(entry.key)) {
         // fallback exists, merge annotations
         mergedEntries[entry.key] =
-            entry.value.withFallback(mergedEntries[entry.key]!);
+            entry.value.withFallback(mergedEntries[entry.key]!, parser);
       } else {
         // no fallback, just add
         mergedEntries[entry.key] = entry.value;
@@ -73,14 +75,25 @@ class EnvEntry {
 
   /// Merges this [EnvEntry] with the given [fallback].
   /// We only merge annotations, not the key or value.
-  EnvEntry withFallback(EnvEntry fallback) {
+  EnvEntry withFallback(EnvEntry fallback, EnvParser parser) {
+    final currentType = annotations.getTypeAnnotation();
+    final fallbackType = fallback.annotations.getTypeAnnotation();
+    Object? actualValue = value;
+    if (currentType == null && fallbackType != null) {
+      // no type annotation, but fallback has one
+      // use fallback type
+      actualValue = parser.parseValue(
+        value: value.toString(),
+        type: fallbackType,
+      );
+    }
     return EnvEntry(
       annotations: {
         ...fallback.annotations,
         ...annotations,
       },
       key: key,
-      value: value,
+      value: actualValue,
     );
   }
 }
