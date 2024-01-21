@@ -11,7 +11,7 @@ class Env {
 }
 
 class EnvData {
-  final apiEndpoint = 'https://prod.example.com';
+  final String apiEndpoint = 'https://prod.example.com';
 
   // "my-prod-key"
   static const _apiKey = [53360, 40714, 8618, 13313, 8208, 52813, 4456, 26436, 43212, 33059, 16374];

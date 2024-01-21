@@ -16,13 +16,13 @@ class EnvParser {
   const EnvParser();
 
   /// Parses the .env file from the file system.
-  EnvFile fromFileSystem() {
+  EnvFile readFileSystem() {
     EnvFile? curr;
     for (final envFile in _envFiles) {
       final file = File(envFile);
       if (file.existsSync()) {
         final content = file.readAsStringSync();
-        final parsed = parse(content);
+        final parsed = parseFileContents(content);
         if (curr != null) {
           curr = parsed.withFallback(curr);
         } else {
@@ -39,7 +39,7 @@ class EnvParser {
   }
 
   /// Parses the .env file from the given [content].
-  EnvFile parse(String content) {
+  EnvFile parseFileContents(String content) {
     final lines = content.split('\n');
 
     // file config
@@ -104,14 +104,16 @@ class EnvParser {
     } else {
       return EnvEntryAnnotation(
         key: annotationParts[0].trim(),
-        value: parseValue(value: annotationParts[1].trim()),
+        value: parseValue(value: annotationParts[1].trim())!,
       );
     }
   }
 
   /// Parses the entry from the given [line].
   EnvEntry? parseEntry(
-      String line, Map<String, EnvEntryAnnotation> annotations) {
+    String line,
+    Map<String, EnvEntryAnnotation> annotations,
+  ) {
     final parts = line.split('=');
     if (parts.length != 2) {
       return null;
@@ -122,14 +124,22 @@ class EnvParser {
       key: parts[0].trim(),
       value: parseValue(
         value: parts[1].trim(),
-        type: annotations[EnvEntryAnnotation.type]?.value as String?,
+        type: annotations.getTypeAnnotation(),
       ),
     );
   }
 
   /// Parses the value from the given [value] and [type].
-  Object parseValue({required String value, String? type}) {
+  Object? parseValue({required String value, String? type}) {
     if (type != null) {
+      if (type.endsWith('?')) {
+        if (value == 'null') {
+          return null;
+        } else {
+          type = type.substring(0, type.length - 1);
+        }
+      }
+
       switch (type) {
         case 'bool':
           return value == 'true';
@@ -143,6 +153,7 @@ class EnvParser {
           throw Exception('Unknown type: $type');
       }
     }
+
     if (value == 'true') {
       return true;
     }
@@ -151,11 +162,8 @@ class EnvParser {
       return false;
     }
 
-    if (value.startsWith('"') && value.endsWith('"')) {
-      return value.substring(1, value.length - 1);
-    }
-
-    if (value.startsWith("'") && value.endsWith("'")) {
+    if ((value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))) {
       return value.substring(1, value.length - 1);
     }
 

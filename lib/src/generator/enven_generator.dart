@@ -27,7 +27,7 @@ class EnvenGenerator {
               .toCamelCase();
 
       buffer.writeln(
-        '  static ${entry.value.runtimeType} get $key => instance.$key;',
+        '  static ${entry.annotations.getTypeAnnotation() ?? entry.value.runtimeType} get $key => instance.$key;',
       );
     }
 
@@ -48,19 +48,25 @@ class EnvenGenerator {
           (entry.annotations[EnvEntryAnnotation.name]?.value.toString() ??
                   entry.key)
               .toCamelCase();
+      final valueType = entry.annotations.getTypeAnnotation();
 
-      if (entry.annotations[EnvEntryAnnotation.obfuscate]?.value == true) {
-        _generateObfuscatedEntry(buffer, random, key, entry.value);
+      if (entry.value != null &&
+          entry.annotations[EnvEntryAnnotation.obfuscate]?.value == true) {
+        _generateObfuscatedEntry(buffer, random, key, valueType, entry.value);
       } else {
-        buffer.writeln('  final $key = ${_generateValue(entry.value)};');
+        buffer.writeln(
+          '  final ${valueType ?? entry.value.runtimeType} $key = ${_generateValue(entry.value)};',
+        );
       }
     }
     buffer.writeln('}');
     return buffer.toString();
   }
 
-  String _generateValue(Object value) {
-    if (value is String) {
+  String _generateValue(Object? value) {
+    if (value == null) {
+      return 'null';
+    } else if (value is String) {
       return "'$value'";
     } else if (value is bool) {
       return value.toString();
@@ -77,7 +83,8 @@ class EnvenGenerator {
     StringBuffer buffer,
     Random random,
     String key,
-    Object rawValue,
+    String? valueType,
+    Object? rawValue,
   ) {
     if (rawValue is String) {
       final value = rawValue.toString();
@@ -94,7 +101,7 @@ class EnvenGenerator {
       buffer.writeln('  // "$value"');
       buffer.writeln('  static const _$key = $obfuscatedValue;');
       buffer.writeln('  static const _$key\$ = $randomCodes;');
-      buffer.writeln('  ${rawValue.runtimeType} get $key {');
+      buffer.writeln('  ${valueType ?? rawValue.runtimeType} get $key {');
       buffer.writeln('    return String.fromCharCodes([');
       buffer.writeln('      for (int i = 0; i < _$key.length; i++)');
       buffer.writeln('        _$key[i] ^ _$key\$[i],');

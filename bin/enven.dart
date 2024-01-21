@@ -6,7 +6,7 @@ import 'package:enven/src/parser/env_parser.dart';
 import 'package:enven/src/util/file_utils.dart';
 
 void main() {
-  final env = EnvParser().fromFileSystem();
+  final env = EnvParser().readFileSystem();
   final outputContent = EnvenGenerator().generate(env);
   final outputPath = env.config.output ?? EnvenConfig.defaultOutput;
   FileUtils.createMissingFolders(filePath: outputPath);

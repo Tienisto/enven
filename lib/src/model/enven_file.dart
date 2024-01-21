@@ -63,7 +63,7 @@ class EnvEntry {
   final String key;
 
   /// The value of this entry. ("value" in "key=value")
-  final Object value;
+  final Object? value;
 
   EnvEntry({
     required this.annotations,
@@ -103,4 +103,10 @@ class EnvEntryAnnotation {
     required this.key,
     required this.value,
   });
+}
+
+extension AnnotationsExt on Map<String, EnvEntryAnnotation> {
+  String? getTypeAnnotation() {
+    return this[EnvEntryAnnotation.type]?.value as String?;
+  }
 }

@@ -6,28 +6,28 @@ void main() {
   const parser = EnvParser();
 
   test('Should parse empty string', () {
-    final env = parser.parse('');
+    final env = parser.parseFileContents('');
     expect(env.config.output, isNull);
     expect(env.config.seed, isNull);
     expect(env.entries, isEmpty);
   });
 
   test('Should parse only output', () {
-    final env = parser.parse('#enven:output=hi.dart');
+    final env = parser.parseFileContents('#enven:output=hi.dart');
     expect(env.config.output, 'hi.dart');
     expect(env.config.seed, isNull);
     expect(env.entries, isEmpty);
   });
 
   test('Should parse only seed', () {
-    final env = parser.parse('#enven:seed=123');
+    final env = parser.parseFileContents('#enven:seed=123');
     expect(env.config.output, isNull);
     expect(env.config.seed, '123');
     expect(env.entries, isEmpty);
   });
 
   test('Should parse single key-value', () {
-    final env = parser.parse('aa=bb');
+    final env = parser.parseFileContents('aa=bb');
     expect(env.config.output, isNull);
     expect(env.config.seed, isNull);
     expect(env.entries, hasLength(1));
@@ -39,7 +39,7 @@ void main() {
   });
 
   test('Should parse single key-value with annotation', () {
-    final env = parser.parse('''
+    final env = parser.parseFileContents('''
 #enven:obfuscate
 aa=bb
 ''');
@@ -55,7 +55,7 @@ aa=bb
   });
 
   test('Should ignore ordinary comments', () {
-    final env = parser.parse('''
+    final env = parser.parseFileContents('''
 #enven:obfuscate
 # this is a comment
 aa=bb
@@ -73,7 +73,7 @@ aa=bb
   });
 
   test('Should skip empty line during parsing', () {
-    final env = parser.parse('''
+    final env = parser.parseFileContents('''
 #enven:obfuscate
 
 aa=bb
@@ -90,7 +90,7 @@ aa=bb
   });
 
   test('Should parse multiple key-value', () {
-    final env = parser.parse('''
+    final env = parser.parseFileContents('''
 aa=bb
 cc=dd
 ''');
@@ -111,7 +111,7 @@ cc=dd
   });
 
   test('Should parse multiple key-value with annotation', () {
-    final env = parser.parse('''
+    final env = parser.parseFileContents('''
 #enven:obfuscate
 aa=bb
 
