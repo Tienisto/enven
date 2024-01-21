@@ -16,6 +16,13 @@ The solution by [envied](https://pub.dev/packages/envied) requires you to write 
 
 With enven, you just need to write a `.env` file and run `dart run enven` to generate a `env.g.dart` file.
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Configuration](#configuration)
+- [Overrides](#overrides)
+- [Mocking](#mocking)
+
 ## Getting Started
 
 **Step 1: Add dependency**
@@ -114,6 +121,26 @@ Here is the precedence:
 3. `.env.development`
 4. `.env.dev`
 5. `.env`
+
+## Mocking
+
+You can also mock the environment variables by setting `Env.instance` to a mocked object.
+
+```dart
+import 'package:your_package/gen/env.g.dart';
+
+class MockEnvData implements EnvData {
+  String get apiKey => 'I am mocked';
+}
+
+void main() {
+  print(Env.apiKey); // "abcdefg"
+  Env.instance = MockEnvData();
+  print(Env.apiKey); // "I am mocked"
+}
+```
+
+You can also use `with EnvData` instead of `implements EnvData` to only override some variables.
 
 ## License
 
