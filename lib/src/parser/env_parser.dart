@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:enven/model/enven_file.dart';
+import 'package:enven/src/model/enven_file.dart';
 
 const _envFiles = [
   '.env',

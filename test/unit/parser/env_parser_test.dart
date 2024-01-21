@@ -1,4 +1,4 @@
-import 'package:enven/parser/env_parser.dart';
+import 'package:enven/src/parser/env_parser.dart';
 import 'package:test/test.dart';
 
 void main() {

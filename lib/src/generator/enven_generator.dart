@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:enven/model/enven_file.dart';
-import 'package:enven/util/recase.dart';
+import 'package:enven/src/model/enven_file.dart';
+import 'package:enven/src/util/recase.dart';
 
 class EnvenGenerator {
   const EnvenGenerator();

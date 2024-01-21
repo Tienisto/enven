@@ -1,5 +1,5 @@
-import 'package:enven/model/enven_file.dart';
-import 'package:enven/parser/env_parser.dart';
+import 'package:enven/src/model/enven_file.dart';
+import 'package:enven/src/parser/env_parser.dart';
 import 'package:test/test.dart';
 
 void main() {
