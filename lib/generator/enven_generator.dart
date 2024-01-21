@@ -13,12 +13,31 @@ class EnvenGenerator {
     buffer.writeln('///');
     buffer.writeln('/// To regenerate, run: `dart run enven`');
     buffer.writeln('class Env {');
+    buffer.writeln('  /// Override this instance to mock the environment.');
+    buffer.writeln('  /// Example: `Env.instance = MockEnvData();`');
+    buffer.writeln('  static EnvData instance = EnvData();');
+    buffer.writeln();
 
+    final entries = env.entries.entries.toList();
+    for (int i = 0; i < entries.length; i++) {
+      final entry = entries[i].value;
+      final key =
+          (entry.annotations[EnvEntryAnnotation.name]?.value.toString() ??
+                  entry.key)
+              .toCamelCase();
+
+      buffer.writeln(
+        '  static ${entry.value.runtimeType} get $key => instance.$key;',
+      );
+    }
+
+    buffer.writeln('}');
+
+    buffer.writeln();
+    buffer.writeln('class EnvData {');
     final random = env.config.seed == null
         ? Random.secure()
         : Random(env.config.seed!.hashCode);
-
-    final entries = env.entries.entries.toList();
     for (int i = 0; i < entries.length; i++) {
       final entry = entries[i].value;
       if (i != 0) {
@@ -33,10 +52,9 @@ class EnvenGenerator {
       if (entry.annotations[EnvEntryAnnotation.obfuscate]?.value == true) {
         _generateObfuscatedEntry(buffer, random, key, entry.value);
       } else {
-        buffer.writeln('  static const $key = ${_generateValue(entry.value)};');
+        buffer.writeln('  final $key = ${_generateValue(entry.value)};');
       }
     }
-
     buffer.writeln('}');
     return buffer.toString();
   }
@@ -76,7 +94,7 @@ class EnvenGenerator {
       buffer.writeln('  // "$value"');
       buffer.writeln('  static const _$key = $obfuscatedValue;');
       buffer.writeln('  static const _$key\$ = $randomCodes;');
-      buffer.writeln('  static ${rawValue.runtimeType} get $key {');
+      buffer.writeln('  ${rawValue.runtimeType} get $key {');
       buffer.writeln('    return String.fromCharCodes([');
       buffer.writeln('      for (int i = 0; i < _$key.length; i++)');
       buffer.writeln('        _$key[i] ^ _$key\$[i],');
