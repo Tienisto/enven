@@ -1,7 +1,7 @@
 # https://pub.dartlang.org/packages/build_config
 builders:
   enven:
-    import: 'package:enven/enven_build_runner.dart'
+    import: 'package:enven/src/enven_build_runner.dart'
     builder_factories: ['envBuilder']
     build_extensions: {'$lib$': ['.g.dart']}
     build_to: source
