@@ -1,3 +1,7 @@
+## 1.0.0
+
+- mark as stable
+
 ## 0.3.0
 
 - feat: make variables mockable
