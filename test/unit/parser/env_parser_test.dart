@@ -46,6 +46,20 @@ void main() {
       expect(entry!.key, 'key');
       expect(entry.value, 'hello=world');
     });
+
+    test('Should parse 2 consecutive equals sign', () {
+      final entry = parser.parseEntry('key=hello==world', {});
+      expect(entry, isNotNull);
+      expect(entry!.key, 'key');
+      expect(entry.value, 'hello==world');
+    });
+
+    test('Should parse ending with equals sign', () {
+      final entry = parser.parseEntry('key=hello=', {});
+      expect(entry, isNotNull);
+      expect(entry!.key, 'key');
+      expect(entry.value, 'hello=');
+    });
   });
 
   group('parseValue', () {
