@@ -8,4 +8,4 @@ pubspec.lock
 /.env.prod
 
 /lib/gen
-/.fvm/flutter_sdk
+/.fvm/
