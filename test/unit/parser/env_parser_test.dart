@@ -39,6 +39,13 @@ void main() {
       final entry = parser.parseEntry('key', {});
       expect(entry, isNull);
     });
+
+    test('Should parse with equals sign', () {
+      final entry = parser.parseEntry('key=hello=world', {});
+      expect(entry, isNotNull);
+      expect(entry!.key, 'key');
+      expect(entry.value, 'hello=world');
+    });
   });
 
   group('parseValue', () {
