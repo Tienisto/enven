@@ -127,7 +127,7 @@ class EnvParser {
     Map<String, EnvEntryAnnotation> annotations,
   ) {
     final parts = line.split('=');
-    if (parts.length != 2) {
+    if (parts.length < 2) {
       return null;
     }
 
@@ -135,7 +135,7 @@ class EnvParser {
       annotations: annotations,
       key: parts[0].trim(),
       value: parseValue(
-        value: parts[1].trim(),
+        value: parts.sublist(1).join('=').trim(),
         type: annotations.getTypeAnnotation(),
       ),
     );

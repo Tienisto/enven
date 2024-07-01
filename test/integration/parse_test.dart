@@ -54,6 +54,18 @@ aa=bb
     expect(e.annotations[EnvEntryAnnotation.obfuscate]!.value, true);
   });
 
+  test('Should parse value with equals sign', () {
+    final env = parser.parseContent('''aa=bb=cc''');
+    expect(env.config.output, isNull);
+    expect(env.config.seed, isNull);
+    expect(env.entries, hasLength(1));
+
+    final e = env.entries['aa']!;
+    expect(e.key, 'aa');
+    expect(e.value, 'bb=cc');
+    expect(e.annotations, isEmpty);
+  });
+
   test('Should ignore ordinary comments', () {
     final env = parser.parseContent('''
 #enven:obfuscate

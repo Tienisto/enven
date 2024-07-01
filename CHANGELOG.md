@@ -1,3 +1,7 @@
+## 1.0.1
+
+- fix: parse values with equals sign
+
 ## 1.0.0
 
 - mark as stable
