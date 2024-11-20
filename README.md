@@ -148,7 +148,7 @@ Be aware that variables annotated with `#enven:const` cannot be overridden.
 
 MIT License
 
-Copyright (c) 2023 Tien Do Nam
+Copyright (c) 2023-2024 Tien Do Nam
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
