@@ -8,4 +8,6 @@ pubspec.lock
 /.env.prod
 
 /lib/gen
-/.fvm/
+
+# FVM Version Cache
+.fvm/
