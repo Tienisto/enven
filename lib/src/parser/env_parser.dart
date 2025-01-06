@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:enven/src/model/enven_file.dart';
+import 'package:enven/src/parser/value_parser.dart';
 
 const _envFiles = [
   '.env',
@@ -9,11 +10,13 @@ const _envFiles = [
   '.env.prod',
   '.env.production',
 ];
-final _doubleRegex = RegExp(r'^-?\d+\.\d+$');
-final _intRegex = RegExp(r'^-?\d+$');
 
 class EnvParser {
-  const EnvParser();
+  final ValueParser valueParser;
+
+  const EnvParser({
+    this.valueParser = const ValueParser(),
+  });
 
   /// Parses the .env file from the file system.
   EnvFile readFileSystem() {
@@ -116,7 +119,7 @@ class EnvParser {
     } else {
       return EnvEntryAnnotation(
         key: annotationParts[0].trim(),
-        value: parseValue(value: annotationParts[1].trim())!,
+        value: valueParser.parseValue(value: annotationParts[1].trim())!,
       );
     }
   }
@@ -134,61 +137,10 @@ class EnvParser {
     return EnvEntry(
       annotations: annotations,
       key: parts[0].trim(),
-      value: parseValue(
+      value: valueParser.parseValue(
         value: parts.sublist(1).join('=').trim(),
         type: annotations.getTypeAnnotation(),
       ),
     );
-  }
-
-  /// Parses the value from the given [value] and [type].
-  Object? parseValue({required String value, String? type}) {
-    if (type != null) {
-      if (type.endsWith('?')) {
-        if (value == 'null') {
-          return null;
-        } else {
-          type = type.substring(0, type.length - 1);
-        }
-      }
-
-      switch (type) {
-        case 'bool':
-          return value == 'true';
-        case 'double':
-          return double.parse(value);
-        case 'int':
-          return int.parse(value);
-        case 'String':
-          return value.split('#')[0].trim();
-        default:
-          throw Exception('Unknown type: $type');
-      }
-    }
-
-    if (value == 'true') {
-      return true;
-    }
-
-    if (value == 'false') {
-      return false;
-    }
-
-    if ((value.startsWith('"') && value.endsWith('"')) ||
-        (value.startsWith("'") && value.endsWith("'"))) {
-      return value.substring(1, value.length - 1);
-    }
-
-    final doubleMatch = _doubleRegex.firstMatch(value);
-    if (doubleMatch != null) {
-      return double.parse(value);
-    }
-
-    final intMatch = _intRegex.firstMatch(value);
-    if (intMatch != null) {
-      return int.parse(value);
-    }
-
-    return value.split('#')[0].trim();
   }
 }

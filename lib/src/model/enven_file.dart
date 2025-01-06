@@ -82,7 +82,7 @@ class EnvEntry {
     if (currentType == null && fallbackType != null) {
       // no type annotation, but fallback has one
       // use fallback type
-      actualValue = parser.parseValue(
+      actualValue = parser.valueParser.parseValue(
         value: value.toString(),
         type: fallbackType,
       );
