@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:build/build.dart';
 import 'package:enven/src/generator/enven_generator.dart';
-import 'package:enven/src/model/enven_file.dart';
+import 'package:enven/src/model/file.dart';
 import 'package:enven/src/parser/env_parser.dart';
 import 'package:enven/src/util/file_utils.dart';
 
@@ -22,7 +22,7 @@ class EnvBuilder implements Builder {
 
     _generated = true;
 
-    final env = EnvParser().readFileSystem();
+    final env = EnvParser().readFileSystem().content;
     final outputContent = EnvenGenerator().generate(env);
     final outputPath = env.config.output ?? EnvenConfig.defaultOutput;
     FileUtils.createMissingFolders(filePath: outputPath);

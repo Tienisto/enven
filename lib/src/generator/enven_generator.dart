@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:enven/src/model/enven_file.dart';
+import 'package:enven/src/model/file.dart';
 import 'package:enven/src/util/recase.dart';
 
 class EnvenGenerator {

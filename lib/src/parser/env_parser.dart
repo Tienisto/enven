@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:enven/src/model/enven_file.dart';
+import 'package:enven/src/model/file.dart';
+import 'package:enven/src/model/result.dart';
 import 'package:enven/src/parser/multiline_string_parser.dart';
 import 'package:enven/src/parser/value_parser.dart';
 
@@ -22,19 +23,20 @@ class EnvParser {
   });
 
   /// Parses the .env file from the file system.
-  EnvFile readFileSystem() {
-    return parseContentList(
-      _envFiles
-          .map((e) {
-            final file = File(e);
-            if (!file.existsSync()) {
-              return null;
-            }
-            return file.readAsStringSync();
-          })
-          .where((element) => element != null)
-          .cast<String>()
-          .toList(),
+  EnvResult readFileSystem() {
+    final candidates = <String>[];
+    final contents = <String>[];
+    for (int i = 0; i < _envFiles.length; i++) {
+      final file = File(_envFiles[i]);
+      if (file.existsSync()) {
+        candidates.add(_envFiles[i]);
+        contents.add(file.readAsStringSync());
+      }
+    }
+
+    return EnvResult(
+      candidates: candidates,
+      content: parseContentList(contents),
     );
   }
 
