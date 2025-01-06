@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:enven/src/model/enven_file.dart';
+import 'package:enven/src/parser/multiline_string_parser.dart';
 import 'package:enven/src/parser/value_parser.dart';
 
 const _envFiles = [
@@ -13,9 +14,11 @@ const _envFiles = [
 
 class EnvParser {
   final ValueParser valueParser;
+  final MultilineStringParser multilineStringParser;
 
   const EnvParser({
     this.valueParser = const ValueParser(),
+    this.multilineStringParser = const MultilineStringParser(),
   });
 
   /// Parses the .env file from the file system.
@@ -63,9 +66,24 @@ class EnvParser {
 
     final entries = <String, EnvEntry>{};
     Map<String, EnvEntryAnnotation> annotationCache = {};
+    MultilineValue? multilineValue;
     for (final line in lines) {
-      if (line.startsWith('#')) {
-        final annotation = parseAnnotation(line);
+      if (multilineValue == null) {
+        multilineValue = multilineStringParser.start(line);
+        if (multilineValue != null) {
+          continue;
+        }
+      } else {
+        multilineStringParser.append(multilineValue, line);
+        if (!multilineValue.isFinished) {
+          continue;
+        }
+      }
+
+      final rawValue = multilineValue?.convertToSingleLine() ?? line;
+
+      if (multilineValue == null && rawValue.startsWith('#')) {
+        final annotation = parseAnnotation(rawValue);
         if (annotation != null) {
           switch (annotation.key) {
             case EnvEntryAnnotation.output:
@@ -79,10 +97,11 @@ class EnvParser {
           }
         }
       } else {
-        final entry = parseEntry(line, annotationCache);
+        final entry = parseEntry(rawValue, annotationCache);
         if (entry != null) {
           entries[entry.key] = entry;
           annotationCache = {};
+          multilineValue = null;
         }
       }
     }

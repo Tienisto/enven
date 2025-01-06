@@ -89,6 +89,20 @@ API_ENDPOINT=https://example.com
 | `type`      | variable   | `String`, `int`, `double`, `bool` | Specify exact type                  | (inferred)           |
 | `name`      | variable   | `String`                          | Specify variable name               | (inferred)           |
 
+## Types
+
+Enven automatically infers the type of the variable from the value.
+
+```bash
+A=1 # int
+B=1.0 # double
+C=true # bool
+D=string # String
+E='string' # String (with quotes)
+F="hello
+world" # String (multiline)
+```
+
 ## Overrides
 
 You may want to have default values. In this case, you should commit `.env` to your repository.
@@ -148,7 +162,7 @@ Be aware that variables annotated with `#enven:const` cannot be overridden.
 
 MIT License
 
-Copyright (c) 2023-2024 Tien Do Nam
+Copyright (c) 2023-2025 Tien Do Nam
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

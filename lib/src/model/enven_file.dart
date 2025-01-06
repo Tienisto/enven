@@ -117,6 +117,11 @@ class EnvEntryAnnotation {
     required this.key,
     required this.value,
   });
+
+  @override
+  String toString() {
+    return '$key=$value';
+  }
 }
 
 extension AnnotationsExt on Map<String, EnvEntryAnnotation> {

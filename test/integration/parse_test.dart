@@ -38,6 +38,18 @@ void main() {
     expect(e.annotations, isEmpty);
   });
 
+  test('Should parse single key-value with quotes', () {
+    final env = parser.parseContent('aa="bb"');
+    expect(env.config.output, isNull);
+    expect(env.config.seed, isNull);
+    expect(env.entries, hasLength(1));
+
+    final e = env.entries['aa']!;
+    expect(e.key, 'aa');
+    expect(e.value, 'bb');
+    expect(e.annotations, isEmpty);
+  });
+
   test('Should parse single key-value with annotation', () {
     final env = parser.parseContent('''
 #enven:obfuscate
@@ -98,6 +110,23 @@ aa=bb
     expect(e.key, 'aa');
     expect(e.value, 'bb');
     expect(e.annotations, hasLength(1));
+    expect(e.annotations[EnvEntryAnnotation.obfuscate]!.value, true);
+  });
+
+  test('Should parse multiline string', () {
+    final env = parser.parseContent('''
+#enven:obfuscate
+aa="hello
+world" # some comment
+''');
+
+    expect(env.config.output, isNull);
+    expect(env.config.seed, isNull);
+    expect(env.entries, hasLength(1));
+
+    final e = env.entries['aa']!;
+    expect(e.key, 'aa');
+    expect(e.value, 'hello\nworld');
     expect(e.annotations[EnvEntryAnnotation.obfuscate]!.value, true);
   });
 

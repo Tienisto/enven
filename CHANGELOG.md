@@ -1,3 +1,8 @@
+## 1.1.0
+
+- feat: handle multiline strings that start with a quote (`'` or `"`)
+- fix: correctly type values as bool, int, or double if they contain a comment (e.g. `VAR=1 # comment`)
+
 ## 1.0.1
 
 - fix: parse values with equals sign

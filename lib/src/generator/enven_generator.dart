@@ -84,7 +84,15 @@ class EnvenGenerator {
     if (value == null) {
       return 'null';
     } else if (value is String) {
-      return "'$value'";
+      final multiline = value.contains('\n');
+      final containsSingleQuote = value.contains("'");
+      if (multiline) {
+        return "'''$value'''";
+      } else if (containsSingleQuote) {
+        return '"$value"';
+      } else {
+        return "'$value'";
+      }
     } else if (value is bool) {
       return value.toString();
     } else if (value is int) {
@@ -115,7 +123,7 @@ class EnvenGenerator {
         (index) => valueCodes[index] ^ randomCodes[index],
       );
 
-      buffer.writeln('  // "$value"');
+      buffer.writeln('  // "${value.replaceAll('\n', r'\n')}"');
       buffer.writeln('  static const _$key = $obfuscatedValue;');
       buffer.writeln('  static const _$key\$ = $randomCodes;');
       buffer.writeln('  ${valueType ?? rawValue.runtimeType} get $key {');
