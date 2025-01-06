@@ -1,3 +1,8 @@
+## 1.2.0
+
+- feat: print detected environment files
+- fix: parse CRLF encoded environment files
+
 ## 1.1.0
 
 - feat: handle multiline strings that start with a quote (`'` or `"`)

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:enven/src/model/file.dart';
@@ -60,7 +61,7 @@ class EnvParser {
 
   /// Parses the .env file from the given [content].
   EnvFile parseContent(String content) {
-    final lines = content.split('\n');
+    final lines = const LineSplitter().convert(content);
 
     // file config
     String? output;

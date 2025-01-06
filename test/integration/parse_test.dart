@@ -130,6 +130,31 @@ world" # some comment
     expect(e.annotations[EnvEntryAnnotation.obfuscate]!.value, true);
   });
 
+  test('Should parse CRLF', () {
+    final env = parser.parseContent('''
+#enven:obfuscate\r\naa=1\r\nbb="hello\r\nworld" # some comment\r\ncc=hello
+''');
+
+    expect(env.config.output, isNull);
+    expect(env.config.seed, isNull);
+    expect(env.entries, hasLength(3));
+
+    final a = env.entries['aa']!;
+    expect(a.key, 'aa');
+    expect(a.value, 1);
+    expect(a.annotations[EnvEntryAnnotation.obfuscate]!.value, true);
+
+    final b = env.entries['bb']!;
+    expect(b.key, 'bb');
+    expect(b.value, 'hello\nworld');
+    expect(b.annotations, isEmpty);
+
+    final c = env.entries['cc']!;
+    expect(c.key, 'cc');
+    expect(c.value, 'hello');
+    expect(c.annotations, isEmpty);
+  });
+
   test('Should parse multiple key-value', () {
     final env = parser.parseContent('''
 aa=bb
