@@ -119,7 +119,7 @@ class EnvParser {
   }
 
   /// Parses the annotation from the given [line].
-  /// Format: #enven:<key>=<value>
+  /// Format: `#enven:<key>=<value>`
   /// If no value is specified, the value is assumed to be true.
   EnvEntryAnnotation? parseAnnotation(String line) {
     if (!line.startsWith('#enven:')) {

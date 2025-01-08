@@ -57,7 +57,7 @@ class EnvenConfig {
 /// Represents a single entry in a .env file.
 class EnvEntry {
   /// Annotations above this entry.
-  /// Format: #enven:<key>=<value>
+  /// Format: `#enven:<key>=<value>`
   /// If no value is specified, the value is assumed to be `true`.
   final Map<String, EnvEntryAnnotation> annotations;
 
