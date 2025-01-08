@@ -50,6 +50,7 @@ void main() {
 
     test('Should parse a string with double quotes with fake comments', () {
       expect(parser.parseValue(value: '"hello #world"'), 'hello #world');
+      expect(parser.parseValue(value: '"hello #1" #2'), 'hello #1');
     });
 
     test('Should parse a string with single quotes', () {
