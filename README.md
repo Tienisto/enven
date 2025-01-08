@@ -20,6 +20,7 @@ With enven, you just need to write a `.env` file and run `dart run enven` to gen
 
 - [Getting Started](#getting-started)
 - [Configuration](#configuration)
+- [Types](#types)
 - [Overrides](#overrides)
 - [Mocking](#mocking)
 
@@ -93,6 +94,8 @@ API_ENDPOINT=https://example.com
 
 Enven automatically infers the type of the variable from the value.
 
+Override the type by adding a comment with `#enven:type=<type>`.
+
 ```bash
 A=1 # int
 B=1.0 # double
@@ -101,6 +104,9 @@ D=string # String
 E='string' # String (with quotes)
 F="hello
 world" # String (multiline)
+
+#enven:type=String
+G=1 # String (override)
 ```
 
 ## Overrides
@@ -144,7 +150,7 @@ You can also mock the environment variables by setting `Env.instance` to a mocke
 ```dart
 import 'package:your_package/gen/env.g.dart';
 
-class MockEnvData implements EnvData {
+class MockEnvData extends EnvData {
   String get apiKey => 'I am mocked';
 }
 
@@ -155,7 +161,7 @@ void main() {
 }
 ```
 
-You can also use `with EnvData` instead of `implements EnvData` to only override some variables.
+You can also use `implements EnvData` instead of `extends EnvData` to force implementing all variables.
 Be aware that variables annotated with `#enven:const` cannot be overridden.
 
 ## License
