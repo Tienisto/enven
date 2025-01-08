@@ -1,3 +1,8 @@
+## 1.2.1
+
+- style: format code
+- docs: update README
+
 ## 1.2.0
 
 - feat: print detected environment files
