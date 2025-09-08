@@ -1,3 +1,7 @@
+## 1.2.2
+
+- deps: loosen `build` dependency constraint
+
 ## 1.2.1
 
 - style: format code
