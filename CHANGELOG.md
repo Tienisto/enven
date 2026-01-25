@@ -1,3 +1,7 @@
+## 1.2.4
+
+- chore: migrating from Github to Codeberg: https://codeberg.org/Tienisto/enven
+
 ## 1.2.3
 
 - deps: loosen `build` dependency constraint

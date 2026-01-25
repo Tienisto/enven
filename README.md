@@ -1,7 +1,7 @@
 # enven
 
 [![pub package](https://img.shields.io/pub/v/enven.svg)](https://pub.dev/packages/enven)
-![ci](https://github.com/Tienisto/enven/actions/workflows/ci.yml/badge.svg)
+![ci](https://codeberg.org/Tienisto/enven/actions/workflows/ci.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Generate environment variables from a .env file at compile time with optional obfuscation.
@@ -168,7 +168,7 @@ Be aware that variables annotated with `#enven:const` cannot be overridden.
 
 MIT License
 
-Copyright (c) 2023-2025 Tien Do Nam
+Copyright (c) 2023-2026 Tien Do Nam
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
