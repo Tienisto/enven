@@ -4,6 +4,8 @@
 ![ci](https://codeberg.org/Tienisto/enven/actions/workflows/ci.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+**ARCHIVE NOTICE:** This repository has been archived. Follow development on [Codeberg](https://codeberg.org/Tienisto/enven).
+
 Generate environment variables from a .env file at compile time with optional obfuscation.
 
 ## Motivation
